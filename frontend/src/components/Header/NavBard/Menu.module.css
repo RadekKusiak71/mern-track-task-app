@@ -1,0 +1,38 @@
+.nav-bar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.active,
+.unactive {
+    width: 90%;
+    height: 50px;
+    margin: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    transition: 0.3s ease-in-out;
+}
+
+.active:hover,
+.unactive:hover {
+    color: #BA9FFB;
+}
+
+.menu-icons {
+    height: 40px;
+    width: 40px;
+}
+
+.unactive {
+    color: #FFFFFF;
+}
+
+.active {
+    color: #BA9FFB;
+}

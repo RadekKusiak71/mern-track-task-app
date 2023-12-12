@@ -1,0 +1,18 @@
+.header {
+    min-height: 100vh;
+    height: fit-content;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #282828;
+    border-radius: 0 40px 40px 0;
+    padding-top: 20px;
+}
+.header-logo{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    padding-left: 15px;
+}

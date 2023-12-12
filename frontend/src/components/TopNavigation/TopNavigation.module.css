@@ -1,0 +1,22 @@
+.top-navigation-icon {
+    height: 80px;
+    width: 80px;
+}
+
+.top-nav-title {
+    width: 300px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.navigation-upper {
+    width: 98%;
+    height: 80px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 25px;
+}

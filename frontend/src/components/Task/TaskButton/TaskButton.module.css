@@ -1,0 +1,17 @@
+.task-button {
+    all: unset;
+    width: 200px;
+    height: 50px;
+    margin: 20px auto 20px auto;
+    cursor: pointer;
+    background-color: #A688FA;
+    text-align: center;
+    color: #000000;
+    font-weight: bold;
+    font-size: 23px;
+    border-radius: 20px;
+    transition: 0.2s ease-in-out;
+}
+.task-button:hover{
+    scale: 1.05;
+}

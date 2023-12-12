@@ -1,0 +1,17 @@
+.create-button {
+    all: unset;
+    width: 200px;
+    height: 50px;
+    cursor: pointer;
+    background-color: #BA9FFB;
+    text-align: center;
+    color: #000000;
+    font-weight: bold;
+    font-size: 23px;
+    border-radius: 20px;
+    transition: 0.2s ease-in-out;
+}
+
+.creaate-button:hover {
+    scale: 1.05;
+}
