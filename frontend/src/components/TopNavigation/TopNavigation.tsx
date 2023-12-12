@@ -5,7 +5,6 @@ import customerIconActive from '../../assets/icons/customer-active.svg'
 import dashboardIconActive from '../../assets/icons/dashboard-active.svg'
 import taskslistIconActive from '../../assets/icons/tasklist-active.svg'
 import { Outlet, useLocation } from 'react-router-dom'
-import SearchInput from './SearchInput/SearchInput'
 import { motion } from 'framer-motion'
 
 const navigationTitle = (pageTitle: string) => {
@@ -41,7 +40,6 @@ const TopNavigation = ({ children }: any) => {
           <CreateButton />
         </div>
         <hr style={{ display: 'block', width: '100%', margin: 'auto auto 20px auto', height: '3px', border: '0px', backgroundColor: '#3F3F3F' }} />
-        <SearchInput />
       </div>
       <Outlet />
     </>

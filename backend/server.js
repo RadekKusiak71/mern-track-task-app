@@ -38,6 +38,18 @@ const createNote = async (newNote) => {
     return note;
 }
 
+const searchByQuery = async (query) => {
+    const regex = new RegExp(query, 'i');
+    const data = await Notes.find({
+        $or: [
+            { title: { $regex: regex } },
+            { description: { $regex: regex } },
+        ],
+    });
+
+    return data;
+};
+
 const updateNote = async (noteId) => {
     const note = await Notes.findByIdAndUpdate({ "_id": noteId, completed: false }, { completed: true });
     note.save()
@@ -52,13 +64,24 @@ main();
 
 app.get('/notes', async (req, res) => {
     try {
-        const notes = await getNotes();
+        const { query } = req.query;
+        let notes;
+
+        if (query) {
+            notes = await searchByQuery(query);
+        } else {
+            notes = await getNotes();
+        }
+
         res.json(notes);
     } catch (error) {
         console.error('Error fetching notes:', error);
         res.status(500).send('Internal Server Error');
     }
 });
+
+
+
 app.get('/notes/uncompleted', async (req, res) => {
     try {
         const notes = await getUncompletedNotes();

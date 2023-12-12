@@ -18,7 +18,7 @@ interface TaskProp {
 
 const Task = ({ task, animateNumber, fetchTasks }: TaskProp) => {
     return (
-        <motion.div animate={{ translateX: ['200%', '0%'] }} transition={{ delay: animateNumber * 0.01 }} className={classes['task-container']}>
+        <motion.div animate={{ scale: 1 }} initial={{ scale: 0.7 }} className={classes['task-container']}>
             <h2 className={classes['task-title']}>{task.title}</h2>
             <p className={classes['task-date']}>{task.create_date}</p>
             <p className={classes['task-description']}>{task.description}</p>
