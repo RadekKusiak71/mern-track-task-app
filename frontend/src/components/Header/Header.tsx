@@ -1,14 +1,15 @@
 import React from 'react'
 import classes from './Header.module.css'
 import Menu from './NavBard/Menu';
+import { motion } from 'framer-motion'
 
 const Header = () => {
 
     return (
-        <header className={classes['header']}>
+        <motion.header animate={{translateX:['-150%','0%']}} transition={{duration:0.3}} className={classes['header']}>
             <h1 className={classes['header-logo']}>Task<br />Tracker</h1>
             <Menu />
-        </header>
+        </motion.header>
     )
 }
 

@@ -1,10 +1,11 @@
 import React from 'react';
 import classes from './TaskButtonDelete.module.css';
 
-const TaskButtonDelete = ({ taskTitle,fetchTasks }: { taskTitle: string,fetchTasks:Function }) => {
+const TaskButtonDelete = ({ taskTitle, fetchUncompletedTasks }: { taskTitle: string, fetchUncompletedTasks: Function }) => {
     const deleteTask = async () => {
+        console.log('xd')
         try {
-            const response = await fetch(`http://127.0.0.1:8000/notes/${taskTitle}`, {
+            const response = await fetch(`http://127.0.0.1:8000/tasks/${taskTitle}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -12,7 +13,7 @@ const TaskButtonDelete = ({ taskTitle,fetchTasks }: { taskTitle: string,fetchTas
             });
 
             if (response.ok) {
-                fetchTasks();
+                fetchUncompletedTasks();
             } else {
                 console.log('Failed to delete task:', response.statusText);
             }
@@ -22,7 +23,7 @@ const TaskButtonDelete = ({ taskTitle,fetchTasks }: { taskTitle: string,fetchTas
     };
 
     return (
-        <button onClick={deleteTask} className={classes['task-button-delete']}>
+        <button type='button' onClick={() => deleteTask()} className={classes['task-button-delete']}>
             Delete
         </button>
     );

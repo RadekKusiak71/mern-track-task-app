@@ -6,7 +6,7 @@
 .search-input-box{
     background-color: #282828;
     width: 95%;
-    height: 45px;
+    min-height: 45px;
     border-radius: 50px;
     display: flex;
     justify-content: flex-start;

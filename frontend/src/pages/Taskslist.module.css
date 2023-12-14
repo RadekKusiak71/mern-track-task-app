@@ -1,15 +1,19 @@
 .tasks-container {
   width: 100%;
-  max-height: 1000px;
+  height: 100%;
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
   flex-shrink: 1;
   padding: 10px;
-  gap: 20px;
+  gap: 30px;
+  row-gap: 30px;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-top: 10px;
+  padding-top: 20px;
+}
+.task-item {
+  margin-bottom: 20px; /* Gap between rows */
 }
 
 /* Firefox */

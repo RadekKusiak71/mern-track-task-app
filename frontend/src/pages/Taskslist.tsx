@@ -21,7 +21,7 @@ const Taskslist = () => {
 
   const fetchUncompletedTasks = useCallback(async () => {
     try {
-      let response = await fetch('http://127.0.0.1:8000/notes/uncompleted', {
+      let response = await fetch('http://127.0.0.1:8000/tasks/uncompleted/', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ const Taskslist = () => {
 
   const fetchTasksByQuery = useCallback(async () => {
     try {
-      let response = await fetch(`http://127.0.0.1:8000/notes?query=${query}`, {
+      let response = await fetch(`http://127.0.0.1:8000/tasks?query=${query}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -66,13 +66,15 @@ const Taskslist = () => {
   }, [query, fetchUncompletedTasks, fetchTasksByQuery]);
 
   return (
-    <div className={classes['tasks-container']}>
+    <>
       <SearchInput handleQueryChange={handleQueryChange} />
-      {tasks.length > 0 &&
-        tasks.map((task: TaskObj, index: number) => (
-          <Task key={index} fetchTasks={fetchUncompletedTasks} animateNumber={index} task={task} />
-        ))}
-    </div>
+      <div className={classes['tasks-container']}>
+        {tasks.length > 0 ?
+          tasks.map((task: TaskObj, index: number) => (
+            <Task key={index} fetchUncompletedTasks={fetchUncompletedTasks} task={task} />
+          )) : <h1 style={{ textAlign: 'center', width: '100%' }}>No tasks found</h1>}
+      </div>
+    </>
   );
 };
 

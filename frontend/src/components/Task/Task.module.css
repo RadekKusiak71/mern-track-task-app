@@ -6,7 +6,6 @@
     border-radius: 15px;
     min-width: 300px;
     max-width: 400px;
-    flex: 0 0 30.333333%;
     padding: 10px;
     padding-top: 20px;
     display: flex;
@@ -20,6 +19,7 @@
 .task-date{
     font-size: 18px;
     color: #8B8B8B;
+    margin: 5px 0 5px 0;
 }
 .task-description{
     font-size: 18px;

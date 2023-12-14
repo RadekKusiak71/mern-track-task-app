@@ -4,6 +4,7 @@ var cors = require('cors')
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded());
 app.use(cors());
 
 const port = 8000;
@@ -13,114 +14,162 @@ async function main() {
     console.log('Connected to MongoDB');
 }
 
-const noteSchema = new mongoose.Schema({
+const taskSchema = new mongoose.Schema({
     title: String,
-    create_date: String,
+    create_date: Date,
     description: String,
-    completed: Boolean,
-    completed_date: String,
+    completed: Boolean, // initially false
+    completed_date: Date, // initially null
 });
 
-const Notes = mongoose.model('notes', noteSchema);
+const tasks = mongoose.model('tasks', taskSchema);
 
-const getNotes = async () => {
-    data = await Notes.find();
+const getTasks = async () => {
+    data = await tasks.find();
     return data;
 }
-const getUncompletedNotes = async () => {
-    data = await Notes.find({ completed: false });
+const getUncompletedTasks = async () => {
+    data = await tasks.find({ completed: false });
     return data;
 }
 
-const createNote = async (newNote) => {
-    const note = new Notes(newNote);
-    await note.save();
-    return note;
+const createTask = async (newTask) => {
+    const task = new tasks(newTask);
+    task.completed = false
+    task.completed_date = null
+    await task.save();
+    return task;
 }
 
 const searchByQuery = async (query) => {
     const regex = new RegExp(query, 'i');
-    const data = await Notes.find({
-        $or: [
-            { title: { $regex: regex } },
-            { description: { $regex: regex } },
-        ],
+    const data = await tasks.find({
+        title: { $regex: regex },
+        completed: false
     });
-
     return data;
 };
 
-const updateNote = async (noteId) => {
-    const note = await Notes.findByIdAndUpdate({ "_id": noteId, completed: false }, { completed: true });
-    note.save()
+// function to mark task as complete
+const updateTask = async (taskID) => {
+    const date = new Date()
+    const task = await tasks.findByIdAndUpdate(taskID, { completed: true, completed_date: date });
+    return task
 }
 
-const deleteNote = async (taskTitle) => {
-    const note = await Notes.deleteOne({ title: taskTitle });
-    console.log(note);
+const deleteTask = async (taskTitle) => {
+    const task = await tasks.deleteOne({ title: taskTitle });
+    return task
 }
+
+
+const getMonthlyTasksStats = async () => {
+    const tasksArr = await tasks.find({})
+
+    monthlyData = {
+        '01': 0,
+        '02': 0,
+        '03': 0,
+        '04': 0,
+        '05': 0,
+        '06': 0,
+        '07': 0,
+        '08': 0,
+        '09': 0,
+        '10': 0,
+        '11': 0,
+        '12': 0
+    };
+
+    if (tasks) {
+        for (let i = 0; i < tasksArr.length; i++) {
+
+            month = new Date(tasksArr[i].create_date).getMonth().toString()
+
+            if (month.length < 10) {
+                monthlyData[`0${month}`]++
+            } else {
+                monthlyData[month]++
+            }
+        }
+        return monthlyData
+    } else {
+        return res.status(404)
+    }
+
+}
+
 
 main();
 
-app.get('/notes', async (req, res) => {
+app.get('/tasks', async (req, res) => {
     try {
         const { query } = req.query;
-        let notes;
+        let tasks;
 
         if (query) {
-            notes = await searchByQuery(query);
+            tasks = await searchByQuery(query);
         } else {
-            notes = await getNotes();
+            tasks = await getTasks();
         }
-
-        res.json(notes);
+        res.json(tasks);
     } catch (error) {
-        console.error('Error fetching notes:', error);
+        console.error('Error fetching tasks:', error);
         res.status(500).send('Internal Server Error');
     }
 });
 
-
-
-app.get('/notes/uncompleted', async (req, res) => {
+app.get('/tasks/monthly', async (req, res) => {
     try {
-        const notes = await getUncompletedNotes();
-        res.json(notes);
+        const data = await getMonthlyTasksStats()
+        console.log(data)
+        res.status(200).json(data)
+    } catch (err) {
+        console.log('Error while fetching tasks: ', err)
+    }
+})
+
+
+
+app.get('/tasks/uncompleted', async (req, res) => {
+    try {
+        const tasks = await getUncompletedTasks();
+        res.json(tasks);
     } catch (error) {
-        console.error('Error fetching notes:', error);
+        console.error('Error fetching tasks:', error);
         res.status(500).send('Internal Server Error');
     }
 });
 
-app.post('/notes', async (req, res) => {
+app.post('/tasks', async (req, res) => {
     try {
         const newNote = req.body;
-        const createdNote = await createNote(newNote);
-        res.status(201).json(createdNote); // 201 Created status for successful creation
+        const creadedNote = createTask(newNote)
+        res.status(201).json(creadedNote)
     } catch (error) {
-        console.error('Error creating note:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-app.patch('/notes/:taskId', async (req, res) => {
-    try {
-        const taskId = req.params.taskId;
-        console.log(taskId)
-        await updateNote(taskId);
-        res.status(200) //200 ok for updating a note
-    } catch (error) {
-        console.error('Error updating note:', error);
+        console.error('Error creating task:', error);
         res.status(500).send('Internal Server Error');
     }
 });
 
-app.delete('/notes/:taskTitle', async (req, res) => {
+app.patch('/tasks/:taskId', async (req, res) => {
+    try {
+        const taskId = req.params.taskId;
+        const task = await updateTask(taskId);
+        res.status(200).json(task) //200 ok for updating a task
+    } catch (error) {
+        console.error('Error updating task:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.delete('/tasks/:taskTitle', async (req, res) => {
     try {
         const taskTitle = req.params.taskTitle;
-        await deleteNote(taskTitle);
+        await deleteTask(taskTitle);
         res.sendStatus(204);
     } catch (error) {
-        console.error('Error deleting note:', error);
+        console.error('Error deleting task:', error);
         res.status(500).send('Internal Server Error');
     }
 });

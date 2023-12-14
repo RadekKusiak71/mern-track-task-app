@@ -12,19 +12,25 @@ interface TaskProp {
         description: string
         completed: boolean,
     }
-    animateNumber: number
-    fetchTasks: Function
+    fetchUncompletedTasks: Function
 }
+const Task = ({ task, fetchUncompletedTasks }: TaskProp) => {
 
-const Task = ({ task, animateNumber, fetchTasks }: TaskProp) => {
+    const dateManipulateYMD = (createdDate: string) => {
+        const year: number = new Date(createdDate).getFullYear()
+        const day: number = new Date(createdDate).getDate()
+        const month: number = new Date(createdDate).getMonth()
+        return `${year}-${month}-${day}`
+    }
+
     return (
         <motion.div animate={{ scale: 1 }} initial={{ scale: 0.7 }} className={classes['task-container']}>
             <h2 className={classes['task-title']}>{task.title}</h2>
-            <p className={classes['task-date']}>{task.create_date}</p>
+            <p className={classes['task-date']}>{dateManipulateYMD(task.create_date)}</p>
             <p className={classes['task-description']}>{task.description}</p>
             <div className={classes['task-actions']}>
-                <TaskButton fetchTasks={fetchTasks} taskID={task._id} />
-                <TaskButtonDelete fetchTasks={fetchTasks} taskTitle={task.title} />
+                <TaskButton fetchUncompletedTasks={fetchUncompletedTasks} taskID={task._id} />
+                <TaskButtonDelete fetchUncompletedTasks={fetchUncompletedTasks} taskTitle={task.title} />
             </div>
         </motion.div>
     )
