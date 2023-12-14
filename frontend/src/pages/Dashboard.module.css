@@ -1,0 +1,10 @@
+.dashboard{
+    width: 100%;
+    height: fit-content;
+}
+.dashboard-upper{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 30px;
+}
