@@ -1,8 +1,6 @@
 import React from 'react'
 import classes from './Menu.module.css'
 import { NavLink } from "react-router-dom";
-import customerIcon from '../../../assets/icons/customer.svg'
-import customerIconActive from '../../../assets/icons/customer-active.svg'
 import dashboardIcon from '../../../assets/icons/dashboard.svg'
 import dashboardIconActive from '../../../assets/icons/dashboard-active.svg'
 import taskslistIcon from '../../../assets/icons/tasklist.svg'
@@ -54,7 +52,6 @@ const Menu = () => {
         <nav className={classes['nav-bar']}>
             {renderNavLink({ path: '/', title: 'Dashboard', activeImg: dashboardIconActive, unactiveImg: dashboardIcon })}
             {renderNavLink({ path: '/taskslist', title: 'Taskslist', activeImg: taskslistIconActive, unactiveImg: taskslistIcon })}
-            {renderNavLink({ path: '/profile', title: 'Profile', activeImg: customerIconActive, unactiveImg: customerIcon })}
         </nav>
     )
 }
