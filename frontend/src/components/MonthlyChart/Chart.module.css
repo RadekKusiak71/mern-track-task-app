@@ -1,0 +1,103 @@
+.chart-container{
+    width: 100%;
+    margin-bottom: 30px;
+}
+.chart-title {
+    font-size: 30px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+}
+
+.chart-title>img {
+    width: 60px;
+    height: 60px;
+}
+
+.chart {
+    background-color: #282828;
+    height: 500px;
+    width: 100%;
+    border-radius: 20px;
+    padding: 5px 20px 15px 20px;
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.chart-column-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: column;
+    height: 400px;
+    width: 4%;
+    gap: 5px;
+    font-weight: bold;
+    color: #8B8B8B;
+    font-size: 20px;
+}
+
+.hover-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 50px;
+    color: white;
+    z-index: 999;
+}
+
+.chart-column-container>hr {
+    width: 60%;
+    background-color: #A688FA;
+}
+
+.chart-column {
+    min-width: 20px;
+    width: 120%;
+    background-color: #A688FA;
+    border-radius: 5px 5px 0 0;
+}
+
+.chart-year-input {
+    height: 80px;
+    background-color: #282828;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin: 20px auto 20px auto;
+}
+
+.chart-year-input > button {
+    all: unset;
+    cursor: pointer;
+    width: 150px;
+    height: 100%;
+    border-radius: 20px 0px 0 20px;
+    background-color: #282828;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s ease-in-out;
+    z-index: 1;
+}
+.chart-year-input>h3{
+    z-index: 0;
+    font-size: 30px;
+}
+.chart-year-input > button:hover{
+    background-color: #A688FA;
+}
+.chart-year-input>button:first-child {
+    border-radius: 20px 0px 0 20px;
+}
+
+.chart-year-input>button:last-child {
+    border-radius: 0px 20px 20px 0px;
+}

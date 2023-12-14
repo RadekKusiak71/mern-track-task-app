@@ -16,10 +16,10 @@ async function main() {
 
 const taskSchema = new mongoose.Schema({
     title: String,
-    create_date: Date,
+    create_date: { type: Date, default: Date.now },
     description: String,
-    completed: Boolean, // initially false
-    completed_date: Date, // initially null
+    completed: { type: Boolean, default: false },
+    completed_date: { type: Date, default: null },
 });
 
 const tasks = mongoose.model('tasks', taskSchema);
@@ -62,44 +62,61 @@ const deleteTask = async (taskTitle) => {
     return task
 }
 
+const getMonthlyTasksStats = async (year) => {
+    try {
+        const startDate = new Date(`${Number(year)}-01-01T00:00:00.000Z`);
+        const endDate = new Date(`${Number(year) + 1}-01-01T00:00:00.000Z`);
 
-const getMonthlyTasksStats = async () => {
-    const tasksArr = await tasks.find({})
+        const tasksArr = await tasks.find({
+            completed: true,
+            create_date: {
+                $gte: startDate,
+                $lt: endDate,
+            },
+        });
 
-    monthlyData = {
-        '01': 0,
-        '02': 0,
-        '03': 0,
-        '04': 0,
-        '05': 0,
-        '06': 0,
-        '07': 0,
-        '08': 0,
-        '09': 0,
-        '10': 0,
-        '11': 0,
-        '12': 0
+        const monthlyData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+        for (let i = 0; i < tasksArr.length; i++) {
+            const month = new Date(tasksArr[i].create_date).getMonth();
+            monthlyData[month]++;
+        }
+
+        return { completedTasksPerMonth: monthlyData };
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+const getOverallStats = async (year) => {
+    const startDate = new Date(`${Number(year)}-01-01T00:00:00.000Z`);
+    const endDate = new Date(`${Number(year) + 1}-01-01T00:00:00.000Z`);
+
+    const tasksCompletedCount = await tasks.countDocuments({
+        completed: true,
+        create_date: {
+            $gte: startDate,
+            $lt: endDate,
+        },
+    });
+
+    const tasksUncompletedCount = await tasks.countDocuments({
+        completed: false,
+        create_date: {
+            $gte: startDate,
+            $lt: endDate,
+        },
+    });
+
+    const data = {
+        completed: tasksCompletedCount,
+        uncompleted: tasksUncompletedCount,
+        ratio: tasksCompletedCount / (tasksCompletedCount + tasksUncompletedCount),
     };
 
-    if (tasks) {
-        for (let i = 0; i < tasksArr.length; i++) {
-
-            month = new Date(tasksArr[i].create_date).getMonth().toString()
-
-            if (month.length < 10) {
-                monthlyData[`0${month}`]++
-            } else {
-                monthlyData[month]++
-            }
-        }
-        return monthlyData
-    } else {
-        return res.status(404)
-    }
-
-}
-
-
+    return data;
+};
 main();
 
 app.get('/tasks', async (req, res) => {
@@ -119,10 +136,18 @@ app.get('/tasks', async (req, res) => {
     }
 });
 
-app.get('/tasks/monthly', async (req, res) => {
+app.get('/tasks/monthly/:year', async (req, res) => {
     try {
-        const data = await getMonthlyTasksStats()
-        console.log(data)
+        const data = await getMonthlyTasksStats(req.params.year)
+        res.status(200).json(data)
+    } catch (err) {
+        console.log('Error while fetching tasks: ', err)
+    }
+})
+
+app.get('/tasks/stats/:year', async (req, res) => {
+    try {
+        const data = await getOverallStats(req.params.year)
         res.status(200).json(data)
     } catch (err) {
         console.log('Error while fetching tasks: ', err)
